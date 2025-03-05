@@ -6,6 +6,7 @@ import { jwtDecode } from "jwt-decode";
 import { User } from "../hook/useUserAuth";
 import Api from "./api";
 import { useLoading } from "../displayMech/loading";
+import cookies from "./cookies";
 
 export async function startAuth(setLocation: (s: string)=>void) {
     const loading = useLoading;
@@ -21,18 +22,23 @@ export async function startAuth(setLocation: (s: string)=>void) {
                 storage.set('cloudAToken', String(updToken.data.atoken), 'updAToken startAuth')
                 storage.set('cloudToken', String(updToken.data.token), 'updToken startAuth')
                 User.setToken(String(updToken.data.token), String(updToken.data.atoken), decr);
-                setLocation('/')
+                setLocation('/');
+                cookies.set(String(updToken.data.token))
+                loading(false, 'startFuth');
                 //window.location.href='/Файлы';
             }
         } catch(e: any) {
-            if (e){
                 User.exit();
+                loading(false, 'startFuth');
+                cookies.clear()
                 //window.location.href='/Войти';
-            }
+        } finally {
+            loading(false, 'startFuth');
         }
     }
     else {
         User.exit();
+        loading(false, 'startFuth');
         //window.location.href='/Войти';
     }
     loading(false, 'startFuth');

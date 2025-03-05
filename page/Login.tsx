@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Text, TextInput, Button } from "@react-native-material/core";
 import Api from '../src/mech/api';
 import { User } from '../src/hook/useUserAuth';
+import cookies from '../src/mech/cookies';
 
 export default function Login () {
 
@@ -31,10 +32,12 @@ export default function Login () {
                 console.log(res.data)
                 console.log('token add');
                 User.setToken(String(res.data.token), String(res.data.atoken))
+                cookies.set(String(res.data.token))
             })
             .catch((e: any)=>{
                 console.log(e.response.status);
                 setError({email: true, pass: true, text: 'Неверные данные'});
+                cookies.clear();
             });
         }
     }

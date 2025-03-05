@@ -21,7 +21,7 @@ import { useLoading } from './src/displayMech/loading';
 import { Data } from './src/hook/useFolderLocation';
 import { saveContext, getContent } from './src/hook/useFolderLocation';
 import { startAuth } from './src/mech/startAuth';
-import { createUserAuth } from './src/hook/useUserAuth';
+import { createUserAuth, User } from './src/hook/useUserAuth';
 import WorkPage from './page/WorkPage';
 import { Loading } from './src/displayMech/loading';
 
@@ -69,13 +69,13 @@ export default function App() {
     .then((res: Data | null) => {
       console.log(res)
       if (res !== null) setData(res)
+      else User.exit()
     })
     .catch((e: any) => console.log(e))
     .finally(()=>loading(false, 'updateLocation'))
   }, [location])
   
   return (<Box style={style.display}>
-    {true&&<Loading />}
     {loginState ? 
       <FolderContext.Provider value={{folds: data, location: location, setLocation, setData }}>
         <WorkPage />

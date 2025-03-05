@@ -18,7 +18,7 @@ const loading = useLoading;
 export default function FilesList({folds, location, setLocation, setData}: {folds: Data, location: string, setLocation: (str: string) => void, setData: (data: Data)=>void }) {
     const [ pos, setPos ] = useState<number>(-3);
     const [width, setWidth] = useState(windowDimensions);
-    const [ open, setOpen ] = useState(true)
+    const [ open, setOpen ] = useState(false)
 
     useEffect(()=>{
         console.log('filesList')
@@ -95,13 +95,14 @@ export default function FilesList({folds, location, setLocation, setData}: {fold
 
     const longPressMenueAction = async (action: string) => {
         setOpen(false)
-        setPos(-2)
+        setPos(-3)
         console.log(pos)
         switch (action) {
             case 'Открыть': return newLocation(pos);
             case 'Скачать': {
                 const name = pos >= folds.directs.length ? folds.files[pos - folds.directs.length] : folds.directs[pos]
                 console.log('download')
+                console.log(name)
                 download(location, name, User.getToken());
                 break;
             }
@@ -117,6 +118,7 @@ export default function FilesList({folds, location, setLocation, setData}: {fold
 
     const longPress = (index: number) => {
         console.log(index)
+        setPos(index)
         setOpen(true)
     }
     return (

@@ -22,6 +22,7 @@ export function Loading() {
 
     useEffect(()=>{
         setDeg(0)
+        //setInterval(()=>console.log(openGlob), 1000)
         const subscription = Dimensions.addEventListener(
             'change',
             ({window, screen}) => {
