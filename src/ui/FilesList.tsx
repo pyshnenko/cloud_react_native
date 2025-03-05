@@ -9,6 +9,7 @@ import { getContent } from "../hook/useFolderLocation";
 import ElementMenue from "./ElementMenue";
 import { User } from "../hook/useUserAuth";
 import Api from "../mech/api";
+import download from "../mech/download";
 
 const windowDimensions = Dimensions.get('window');
 
@@ -101,7 +102,8 @@ export default function FilesList({folds, location, setLocation, setData}: {fold
             case 'Скачать': {
                 const name = pos >= folds.directs.length ? folds.files[pos - folds.directs.length] : folds.directs[pos]
                 console.log('download')
-                //download(location, name)
+                download(location, name, User.getToken());
+                break;
             }
             case 'Удалить': {
                 loading(true, 'rm');

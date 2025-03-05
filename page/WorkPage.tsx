@@ -56,22 +56,6 @@ export default function WorkPage() {
   );
 }
 
-/*
-      <Image 
-        source={require('../../assets/images/spamigorLogo.png')} />*/
-/*
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Hello World</ThemedText>
-        <ThemedText type="default">Первое приложение под андроид</ThemedText>
-        <Button title="Типа кнопка" onPress={() => alert("🎉🎉🎉")}/>
-        <Button title="Storage" onPress={async () => console.log(await storage.get('cloudToken'))}/>
-        <Button title="Folder" onPress={async () => console.log(data.location)}/>
-        <Button title="setFolder" onPress={async () => console.log(data.setLocation('/test'))}/>
-        <Button title="setFolder/" onPress={async () => console.log(data.setLocation('/'))}/>
-        <Button title="clear" onPress={async () => console.log(await storage.clear())}/>
-      </ThemedView>
-      */
-
 const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'column',
