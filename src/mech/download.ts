@@ -1,8 +1,8 @@
 import RNFetchBlob from 'rn-fetch-blob';
-import { dataUrl } from './httpserv';
+import { Url } from './httpserv';
 import { PermissionsAndroid } from 'react-native';
 
-function download(location: string, name: string, token: string) {
+function download(locationFull: string, name: string, token: string, postfix: string) {
     const { dirs } = RNFetchBlob.fs;
     console.log(name)
     console.log(dirs.DownloadDir + '/' + name)
@@ -21,8 +21,9 @@ function download(location: string, name: string, token: string) {
         title: name,
         path: `${dirs.DownloadDir}/${name}`,
     };
+    console.log(`${Url}${postfix}${locationFull}?t=${token}`)
     RNFetchBlob.config(configfb || {})
-     .fetch('GET', `${dataUrl}${location}${name}`, {})
+     .fetch('GET', `${Url}${postfix}${locationFull}?t=${token}`, {})
      .then(res => {
          console.log("file downloaded")  
      })
@@ -47,14 +48,14 @@ function download(location: string, name: string, token: string) {
         .catch((e: any)=>console.log(e))*/
 }
 
-export default async function getPermission(location: string, name: string, token: string) {
+export default async function getPermission(locationFull: string, name: string, token: string, postfix: string = '/data') {
       try {
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
         );
         console.log(granted)
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-            download(location, name, token);
+        if (true){//granted === PermissionsAndroid.RESULTS.GRANTED) {
+            download(locationFull, name, token, postfix);
         } else {
             console.log("please grant permission");
             // Запрашиваем разрешения для Android 13 и выше (API level 33+)

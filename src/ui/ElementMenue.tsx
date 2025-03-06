@@ -69,7 +69,7 @@ export default function ElementMenue ({open, setOpen, file, setAction}: ElementM
                 {!file&&<Button leading={(props)=><Icon name='folder-open' {...props} />} contentContainerStyle={buttonStyle.buttonIn} variant="outlined" color="#0000FF" title='Открыть' onPress={()=>setAction('Открыть')} />}
                 <Button leading={(props)=><Icon name='download' {...props} />} contentContainerStyle={buttonStyle.buttonIn} variant="outlined" color="#0000FF" title='Скачать' onPress={()=>setAction('Скачать')} />
                 <Button leading={(props)=><Icon name='delete' {...props} />} contentContainerStyle={buttonStyle.buttonIn} variant="outlined" color="#0000FF" title='Удалить' onPress={()=>setAction('Удалить')} />
-                <Button leading={(props)=><Icon name='share' {...props} />} contentContainerStyle={buttonStyle.buttonIn} variant="outlined" color="#0000FF" title='Поделиться' />
+                <Button leading={(props)=><Icon name='share' {...props} />} contentContainerStyle={buttonStyle.buttonIn} variant="outlined" color="#0000FF" title='Поделиться' onPress={()=>setAction('Поделиться')} />
             </Box>
     )
 }

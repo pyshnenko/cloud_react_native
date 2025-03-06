@@ -8,11 +8,19 @@ const windowDimensions = Dimensions.get('window');
 let openArr: string[] = [];
 let openGlob: string[] = [];
 let setOpenGlob: (b: string[])=>void;
+let visibleGlob: boolean = false;
+let setVisibleGlob: (b: boolean)=>void;
 
 export function useLoading(openBool: boolean, name: string) {
 
-    if (openBool && !openGlob.includes(name) && setOpenGlob) {let buf = copy(openGlob); buf.push(name); setOpenGlob(buf)}
-    else if (!openBool && openGlob.includes(name) && setOpenGlob) {let buf = copy(openGlob); buf.splice(openGlob.indexOf(name), 1); setOpenGlob(buf)}
+    if (openBool && !openGlob.includes(name)) openGlob.push(name)
+    else if (!openBool && openGlob.includes(name)) openGlob.splice(openGlob.indexOf(name), 1);
+
+    console.log(openBool);
+    setVisibleGlob(!!openGlob.length)
+
+    /*if (openBool && !openGlob.includes(name)) {let buf = copy(openGlob); buf.push(name); setOpenGlob(buf)}
+    else if (!openBool && openGlob.includes(name)) {let buf = copy(openGlob); buf.splice(openGlob.indexOf(name), 1); setOpenGlob(buf)}*/
 }
 
 export function Loading() {
@@ -20,7 +28,12 @@ export function Loading() {
     const [width, setWidth] = useState(windowDimensions);
     const [deg, setDeg] = useState<number>(-1);
 
+    //let [open, setOpen] = useState<string[]>(openArr);
+    let [visible, setVisible] = useState<boolean>(false)
+
     useEffect(()=>{
+        visibleGlob = visible;
+        setVisibleGlob = setVisible;
         setDeg(0)
         //setInterval(()=>console.log(openGlob), 1000)
         const subscription = Dimensions.addEventListener(
@@ -37,16 +50,18 @@ export function Loading() {
         //console.log(openArr)
     }, [deg])
 
-    let [open, setOpen] = useState<string[]>(openArr);
-    useEffect(()=>{
+    /*useEffect(()=>{
         openArr = open
         console.log(open)
+        if (open.length) setVisible(true)
+        else setVisible(false)
     }, [open]);
+
     openGlob = open;
-    setOpenGlob = setOpen;
+    setOpenGlob = setOpen;*/
 
     return (
-        <>{open.length === 0 ? null :<Box style={{
+        <>{visible ? <Box style={{
             zIndex: 10000, 
             position: 'absolute', 
             width: width.width, 
@@ -72,5 +87,5 @@ export function Loading() {
                 left: 0
             }}/>
             <Image style={{zIndex:10002, transform: [{rotateZ: `${deg}deg`}]}} source={require('../../public/images/react-logo.png')}/>
-        </Box>}</>)
+        </Box> : null}</>)
 }

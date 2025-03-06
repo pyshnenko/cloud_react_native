@@ -72,10 +72,14 @@ export default function App() {
       else User.exit()
     })
     .catch((e: any) => console.log(e))
-    .finally(()=>loading(false, 'updateLocation'))
+    .finally(()=>{
+      console.log('location useEffect finaly')
+      loading(false, 'updateLocation')
+    })
   }, [location])
   
   return (<Box style={style.display}>
+    <Loading />
     {loginState ? 
       <FolderContext.Provider value={{folds: data, location: location, setLocation, setData }}>
         <WorkPage />

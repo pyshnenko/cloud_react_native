@@ -10,6 +10,9 @@ import ElementMenue from "./ElementMenue";
 import { User } from "../hook/useUserAuth";
 import Api from "../mech/api";
 import download from "../mech/download";
+import cookies from "../mech/cookies";
+import { Url } from "../mech/httpserv";
+import TextInputField, {TextProps, ReadyProps} from "./TextInputField";
 
 const windowDimensions = Dimensions.get('window');
 
@@ -18,7 +21,23 @@ const loading = useLoading;
 export default function FilesList({folds, location, setLocation, setData}: {folds: Data, location: string, setLocation: (str: string) => void, setData: (data: Data)=>void }) {
     const [ pos, setPos ] = useState<number>(-3);
     const [width, setWidth] = useState(windowDimensions);
-    const [ open, setOpen ] = useState(false)
+    const [ open, setOpen ] = useState(false);
+    const [ readyProps, setReadyProps ] = useState<ReadyProps>({
+        ready: false,
+        result: {
+            text: '',
+            bool: false
+        }
+    })
+    const [ textFieldsState, setTextFieldsState ] = useState<TextProps>({
+        show: true,
+        yButton: true,
+        nButton: true,
+        name: 'name',
+        text: 'text',
+        inputEnable: false,
+        eventFunc: setReadyProps
+    })
 
     useEffect(()=>{
         console.log('filesList')
@@ -31,6 +50,16 @@ export default function FilesList({folds, location, setLocation, setData}: {fold
         );
         return () => subscription?.remove();
     })
+
+    useEffect(()=>{
+        console.log(readyProps);
+        if (readyProps.ready) {
+            setTextFieldsState({
+                ...textFieldsState,
+                show: false
+            })
+        }
+    }, [readyProps])
 
     useEffect(()=>{
         console.log(width.width%100)
@@ -103,7 +132,25 @@ export default function FilesList({folds, location, setLocation, setData}: {fold
                 const name = pos >= folds.directs.length ? folds.files[pos - folds.directs.length] : folds.directs[pos]
                 console.log('download')
                 console.log(name)
-                download(location, name, User.getToken());
+                if (pos >= folds.directs.length) download(location+name, name, User.getToken())
+                else if (pos >= 0) {
+                    cookies.set(User.getToken());
+                    loading(true, 'save');
+                    Api.askLS(User.getToken(), `${location}/${folds.directs[pos]}`, 'tar', '', true)
+                    .then(async (res: any)=>{
+                        console.log(res.data);
+                        setTimeout((nm: string, token: string)=>
+                            {
+                                download(`/${nm}`, 'Archive.zip', token, ''); 
+                                loading(false, 'save')
+                            }, 
+                            3000, 
+                            res.data.addr,
+                            User.getToken()
+                        ) 
+                    })
+                    .catch((e: any)=> {console.log(e); loading(false, 'save')});
+                }
                 break;
             }
             case 'Удалить': {
@@ -112,6 +159,27 @@ export default function FilesList({folds, location, setLocation, setData}: {fold
                 await Api.askLS(User.getToken(), location, 'rm', fName);
                 newLocation(-2);
                 loading(false, 'rm')
+                break;
+            }
+            case "Поделиться" : {
+                loading(true, 'share')
+                const fName: string = pos >= folds.directs.length ? folds.files[pos - folds.directs.length] : folds.directs[pos];
+                try {
+                    let res = await Api.askLS(User.getToken(),location, 'chmod', fName);
+                    console.log(res.data?.tok)
+                    let expUri: string = encodeURI(`${Url}/download?tok=${res.data.tok}&name=${res.data.name}&type=${res.data.type}`)
+                    console.log(expUri)
+                    setTextFieldsState({
+                        ...textFieldsState,
+                        show: true,
+                        name: 'Ссылка на скачивание',
+                        text: expUri,
+                        yButton: true,
+                        nButton: false
+                    })
+                } 
+                catch {(e: any)=>{console.log(e)}}
+                loading(false, 'share')
             }
         }
     }
@@ -124,6 +192,7 @@ export default function FilesList({folds, location, setLocation, setData}: {fold
     return (
         <Box style={{width: '100%', minHeight: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
             {open&&folds?.directs&&<ElementMenue open={open} setOpen={setOpen} file={pos >= folds?.directs.length} setAction={longPressMenueAction} />}
+            <TextInputField {...textFieldsState} />
             <ScrollView>
                 <Box style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-start', maxWidth: width.width - (width.width%100)}}>
                     <FolderShortcat 

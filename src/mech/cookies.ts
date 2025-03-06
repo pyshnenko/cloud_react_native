@@ -6,6 +6,7 @@ function cookiesSet(token: string) {
     CookieManager.set(dataUrl, {
         name: 'token',
         value: token,
+        path: '/'
     }).then((done: any) => {
         console.log('CookieManager.set =>', done);
     });
