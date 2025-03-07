@@ -1,5 +1,6 @@
 import { Box, TextInput, Text, Button } from "@react-native-material/core";
 import { StyleSheet } from "react-native";
+import { useState } from "react";
 
 export interface ReadyProps {
     id?: number | string, 
@@ -18,11 +19,18 @@ export interface TextProps {
 }
 
 export default function TextInputField (props: TextProps) {
+    const [ text, setText ] = useState<string>(props.text);
     return (<>{props.show && <Box style={style.all}>
         <Box style={style.back} />
         <Box style={style.elem}>
             <Text>{props.name}</Text>
-            <TextInput style={style.inputStyle} multiline={true} defaultValue={props.text} editable={props.inputEnable} />
+            <TextInput 
+                style={style.inputStyle} 
+                multiline={true} 
+                value={text} 
+                onChangeText={(text: string)=>{
+                    if (!props.inputEnable) setText(text)
+                }} />
             <Box style={style.buttonsBox}>
                 {props.yButton && <Button onPress={()=>{
                     props.eventFunc({ready: true, result: {text: '', bool: true}})

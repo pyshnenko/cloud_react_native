@@ -175,7 +175,8 @@ export default function FilesList({folds, location, setLocation, setData}: {fold
                         name: 'Ссылка на скачивание',
                         text: expUri,
                         yButton: true,
-                        nButton: false
+                        nButton: false,
+                        inputEnable: true
                     })
                 } 
                 catch {(e: any)=>{console.log(e)}}

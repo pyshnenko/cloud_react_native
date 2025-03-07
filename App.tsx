@@ -24,6 +24,7 @@ import { startAuth } from './src/mech/startAuth';
 import { createUserAuth, User } from './src/hook/useUserAuth';
 import WorkPage from './page/WorkPage';
 import { Loading } from './src/displayMech/loading';
+import BottomPanel from './src/pageElements/bottomPanel';
 
 const FolderContext = createContext({
   folds: {}, 
@@ -70,8 +71,13 @@ export default function App() {
       console.log(res)
       if (res !== null) setData(res)
       else User.exit()
+      loading(false, 'updateLocation')
     })
-    .catch((e: any) => console.log(e))
+    .catch((e: any) => {
+      console.log(e);
+      
+      loading(false, 'updateLocation')
+    })
     .finally(()=>{
       console.log('location useEffect finaly')
       loading(false, 'updateLocation')
@@ -85,6 +91,7 @@ export default function App() {
         <WorkPage />
       </FolderContext.Provider> : 
       <Login />}
+      {loginState &&<BottomPanel />}
   </Box>)
 }
 
