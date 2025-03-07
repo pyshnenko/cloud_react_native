@@ -13,14 +13,12 @@ import download from "../mech/download";
 import cookies from "../mech/cookies";
 import { Url } from "../mech/httpserv";
 import TextInputField, {TextProps, ReadyProps} from "./TextInputField";
-
-const windowDimensions = Dimensions.get('window');
+import { ScaledSize } from "react-native";
 
 const loading = useLoading;
 
-export default function FilesList({folds, location, setLocation, setData}: {folds: Data, location: string, setLocation: (str: string) => void, setData: (data: Data)=>void }) {
+export default function FilesList({folds, location, setLocation, setData, window}: {folds: Data, location: string, setLocation: (str: string) => void, setData: (data: Data)=>void, window: ScaledSize}) {
     const [ pos, setPos ] = useState<number>(-3);
-    const [width, setWidth] = useState(windowDimensions);
     const [ open, setOpen ] = useState(false);
     const [ readyProps, setReadyProps ] = useState<ReadyProps>({
         ready: false,
@@ -30,25 +28,13 @@ export default function FilesList({folds, location, setLocation, setData}: {fold
         }
     })
     const [ textFieldsState, setTextFieldsState ] = useState<TextProps>({
-        show: true,
+        show: false,
         yButton: true,
         nButton: true,
         name: 'name',
         text: 'text',
         inputEnable: false,
         eventFunc: setReadyProps
-    })
-
-    useEffect(()=>{
-        console.log('filesList')
-        console.log(folds)
-        const subscription = Dimensions.addEventListener(
-            'change',
-            ({window, screen}) => {
-                setWidth(window);
-            },
-        );
-        return () => subscription?.remove();
     })
 
     useEffect(()=>{
@@ -62,9 +48,9 @@ export default function FilesList({folds, location, setLocation, setData}: {fold
     }, [readyProps])
 
     useEffect(()=>{
-        console.log(width.width%100)
-        console.log(`width: ${width.width - (width.width%100)}`)
-    }, [width])
+        console.log(window.width%100)
+        console.log(`width: ${window.width - (window.width%100)}`)
+    }, [window])
 
     const nameToType = (str: string) => {
         const extArr: string [] = str.split('.')
@@ -195,7 +181,7 @@ export default function FilesList({folds, location, setLocation, setData}: {fold
             {open&&folds?.directs&&<ElementMenue open={open} setOpen={setOpen} file={pos >= folds?.directs.length} setAction={longPressMenueAction} />}
             <TextInputField {...textFieldsState} />
             <ScrollView>
-                <Box style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-start', maxWidth: width.width - (width.width%100)}}>
+                <Box style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-start', maxWidth: window.width - (window.width%100)}}>
                     <FolderShortcat 
                         name={'Обновить'} 
                         type="update"

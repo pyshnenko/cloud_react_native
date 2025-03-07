@@ -13,7 +13,7 @@ import {
   StyleSheet,
   Text,
   useColorScheme,
-  View,
+  Dimensions,
 } from 'react-native';
 import { Box } from '@react-native-material/core';
 import Login from './page/Login';
@@ -25,13 +25,18 @@ import { createUserAuth, User } from './src/hook/useUserAuth';
 import WorkPage from './page/WorkPage';
 import { Loading } from './src/displayMech/loading';
 import BottomPanel from './src/pageElements/bottomPanel';
+import { ScaledSize } from 'react-native';
+import TextInputField, {TextProps, ReadyProps, emptyText} from "./src/ui/TextInputField";
 
 const FolderContext = createContext({
   folds: {}, 
   location: '', 
   setLocation: (s: string)=>{}, 
-  setData: (d: {directs: string[], files: string[]})=>{}
+  setData: (d: {directs: string[], files: string[]})=>{},
+  window: {}
 });
+
+const windowDimensions = Dimensions.get('window');
 
 export default function App() {
 
@@ -40,6 +45,7 @@ export default function App() {
   const [ loginState, setLoginState ] = useState<boolean>(false);
   const [ data, setData ] = useState<Data>({directs: [], files: []});
   const [ location, setLocation ] = useState<string>('');
+  const [width, setWidth] = useState(windowDimensions);
   
   createUserAuth(loginState, setLoginState, setData);
   console.log('hello')
@@ -48,7 +54,15 @@ export default function App() {
 
   useEffect(() => {
     console.log('tablayout useeffect')
-    startAuth(setLocation)
+    startAuth(setLocation);
+    
+    const subscription = Dimensions.addEventListener(
+        'change',
+        ({window, screen}) => {
+            setWidth(window);
+        },
+    );
+    return () => subscription?.remove();
   }, [])
 
   useEffect(()=>{
@@ -84,14 +98,22 @@ export default function App() {
     })
   }, [location])
   
+  const [ ready, setReady ] = useState<ReadyProps>({
+      ready: false,
+      result: {text: '', bool: false}
+  })
+
+  const [ textField, setTextField ] = useState<TextProps>(emptyText(setReady))
+  
   return (<Box style={style.display}>
     <Loading />
     {loginState ? 
-      <FolderContext.Provider value={{folds: data, location: location, setLocation, setData }}>
+      <FolderContext.Provider value={{folds: data, location: location, setLocation, setData, window: width }}>
         <WorkPage />
       </FolderContext.Provider> : 
       <Login />}
-      {loginState &&<BottomPanel />}
+      {loginState &&<BottomPanel setReady={setReady} setTextField={setTextField} ready={ready} location={location} setData={setData}/>}
+      <TextInputField {...textField} />
   </Box>)
 }
 
@@ -105,3 +127,4 @@ const style = StyleSheet.create({
   }
 
 })
+

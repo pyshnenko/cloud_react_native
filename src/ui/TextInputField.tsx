@@ -18,8 +18,18 @@ export interface TextProps {
     eventFunc: (v: ReadyProps) => void
 }
 
+export const emptyText = (setReady: (v: ReadyProps)=>void) => {return {
+    show: false,
+    inputEnable: true,
+    yButton: true,
+    nButton: true,
+    name: 'Введи название папки',
+    text: '',
+    eventFunc: setReady
+  }}
+
 export default function TextInputField (props: TextProps) {
-    const [ text, setText ] = useState<string>(props.text);
+    const [ textP, setTextP ] = useState<string>(props.text);
     return (<>{props.show && <Box style={style.all}>
         <Box style={style.back} />
         <Box style={style.elem}>
@@ -27,13 +37,13 @@ export default function TextInputField (props: TextProps) {
             <TextInput 
                 style={style.inputStyle} 
                 multiline={true} 
-                value={text} 
+                value={textP} 
                 onChangeText={(text: string)=>{
-                    if (!props.inputEnable) setText(text)
+                    if (!props.inputEnable) setTextP(text)
                 }} />
             <Box style={style.buttonsBox}>
                 {props.yButton && <Button onPress={()=>{
-                    props.eventFunc({ready: true, result: {text: '', bool: true}})
+                    props.eventFunc({ready: true, result: {text: textP, bool: true}})
                 }} style={style.button} color="green" title='Да' />}
                 {props.nButton && <Button onPress={()=>{
                     props.eventFunc({ready: true, result: {text: '', bool: false}})

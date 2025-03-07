@@ -4,33 +4,49 @@ import IconB from 'react-native-vector-icons/Feather';
 import IconC from 'react-native-vector-icons/MaterialIcons';
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { User } from "../hook/useUserAuth";
-import TextInputField, {TextProps, ReadyProps} from "../ui/TextInputField";
 import { useEffect, useState } from "react";
+import {TextProps, ReadyProps, emptyText} from "../ui/TextInputField";
+import Api from "../mech/api";
+import { useLoading } from "../displayMech/loading";
+import { getContent, Data } from "../hook/useFolderLocation";
 
-export default function BottomPanel () {
+export default function BottomPanel ({setTextField, setReady, ready, location, setData}: {setData: (d: Data) => void , location: string, setTextField: (n: TextProps)=>void, setReady: (n: ReadyProps)=>void, ready: ReadyProps}) {
 
-    const [ ready, setReady ] = useState<ReadyProps>({
-        ready: false,
-        result: {text: '', bool: false}
+    const baseEmptyText = emptyText(setReady);
+
+    const loading = useLoading;
+    
+    const newFolderName = () => setTextField({
+        ...baseEmptyText,
+        show: true,
+        inputEnable: false
     })
-
-    const [ textField, setTextField ] = useState<TextProps>(emptyText(setReady))
-
+    
     useEffect (()=>{
         if (ready.ready) {
             console.log(ready.result)
+            loading(true, 'new_folder')
+            Api.askLS(User.getToken(), location, 'mkdir', ready.result.text)
+                .then((res: any) => {
+                    console.log(res);
+                    getContent(location)
+                    .then((res: Data | null) => {
+                        console.log(res)
+                        if (res !== null) setData(res)
+                    })
+                    .catch((e: any) => console.log(e))
+                    .finally(()=>loading(false, 'new_folder'))
+                })
+                .catch((e: any) => {
+                    console.log(e)
+                    loading(false, 'new_folder')
+                })
             setReady({ready: false, result: {text: '', bool: false}});
             setTextField(emptyText(setReady))
         }
     }, [ready])
 
-    const newFolderName = () => setTextField({
-        ...textField,
-        show: true,
-    })
-
     return (<Box style={style.all}>
-        <TextInputField {...textField} />
         <Box style={style.outBox}>
             <TouchableOpacity>
                 <Box style={{...style.boxIcon}}>
@@ -55,7 +71,7 @@ const style = StyleSheet.create({
         bottom: 0,
         left: 0,
         backgroundColor: 'darkgrey',
-        height: 80,
+        height: 60,
         width: '100%',
         zIndex: 200,
         boxShadow: '0 0 10px darkgrey'
@@ -70,9 +86,9 @@ const style = StyleSheet.create({
     },
     icon: {
         position: 'relative',
-        top: -40,
-        fontSize: 80,
-        borderRadius: 40,
+        top: -20,
+        fontSize: 60,
+        borderRadius: 30,
         color: 'blue',
         boxShadow: '0 0 10px blue',
         borderColor:'blue',
@@ -89,13 +105,3 @@ const style = StyleSheet.create({
         height: '100%'
     }
 })
-
-const emptyText = (setReady: (v: ReadyProps)=>void) => {return {
-    show: false,
-    inputEnable: true,
-    yButton: true,
-    nButton: true,
-    name: 'Введи название папки',
-    text: '',
-    eventFunc: setReady
-}}

@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import { Button } from "@react-native-material/core";
 import { Box, Text } from "@react-native-material/core";
 import Api from '../src/mech/api';
@@ -7,6 +7,7 @@ import { useState, useEffect, useContext } from 'react';
 import FilesList from '../src/ui/FilesList';
 import { getContent } from '../src/hook/useFolderLocation';
 import { Loading, useLoading } from '../src/displayMech/loading';
+import { ScaledSize } from 'react-native';
 //import cookie from '@/components/mech/cookie';
 
 export default function WorkPage() {
@@ -18,7 +19,8 @@ export default function WorkPage() {
     folds: Data, 
     location: string, 
     setLocation: (str: string) => void,
-    setData: (data: Data) => void
+    setData: (data: Data) => void,
+    window: ScaledSize
   } = useContext(FolderContext);
 
   useEffect(()=>{
@@ -29,15 +31,15 @@ export default function WorkPage() {
   return (
     <Box style={{
       backgroundColor: 'aliceblue', 
-      height: '100%', 
+      height: dataCont.window.height-60, 
       width: '100%',
       display: 'flex', 
       flexDirection: 'column',
       alignItems: 'center',
-      paddingTop: 50
+      paddingTop: 0
     }}>
       <Text>{dataCont.location}</Text>
-      <FilesList folds={dataCont.folds} location={dataCont.location} setLocation={dataCont.setLocation} setData={dataCont.setData} />
+      <FilesList folds={dataCont.folds} location={dataCont.location} setLocation={dataCont.setLocation} setData={dataCont.setData} window={dataCont.window} />
       {false&&<Button title='loading' onPress={()=>{
         loading(true, 'button');
         setTimeout(()=>{loading(false, 'button')}, 1000)
