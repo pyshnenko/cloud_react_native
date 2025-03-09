@@ -16,7 +16,7 @@ export function useLoading(openBool: boolean, name: string) {
     if (openBool && !openGlob.includes(name)) openGlob.push(name)
     else if (!openBool && openGlob.includes(name)) openGlob.splice(openGlob.indexOf(name), 1);
 
-    console.log(openGlob);
+    //console.log(openGlob);
     setVisibleGlob(!!openGlob.length)
 
     /*if (openBool && !openGlob.includes(name)) {let buf = copy(openGlob); buf.push(name); setOpenGlob(buf)}

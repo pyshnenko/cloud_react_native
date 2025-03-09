@@ -27,13 +27,16 @@ import { Loading } from './src/displayMech/loading';
 import BottomPanel from './src/pageElements/bottomPanel';
 import { ScaledSize } from 'react-native';
 import TextInputField, {TextProps, ReadyProps, emptyText} from "./src/ui/TextInputField";
+import ProgressFullIndicator from './src/ui/ProgressFullIndicator';
 
 const FolderContext = createContext({
   folds: {}, 
   location: '', 
   setLocation: (s: string)=>{}, 
   setData: (d: {directs: string[], files: string[]})=>{},
-  window: {}
+  window: {},
+  progressRef: {},
+  setProgress: (v:{[key: string]:number})=>{}
 });
 
 const windowDimensions = Dimensions.get('window');
@@ -46,9 +49,11 @@ export default function App() {
   const [ data, setData ] = useState<Data>({directs: [], files: []});
   const [ location, setLocation ] = useState<string>('');
   const [width, setWidth] = useState(windowDimensions);
+  const [progress, setProgress] = useState<{[key: string]: number}>({})
+  const progressRef = useRef<{[key: string]: number}>({})
   
   createUserAuth(loginState, setLoginState, setData);
-  console.log('hello')
+  //console.log('hello')
 
   saveContext(FolderContext);
 
@@ -64,16 +69,6 @@ export default function App() {
     );
     return () => subscription?.remove();
   }, [])
-
-  useEffect(()=>{
-    console.log('loginState')
-    console.log(loginState)
-  }, [loginState])
-
-  useEffect(()=> {
-    console.log('layout data use effect')
-    console.log(data)
-  }, [data])
 
   useEffect(()=>{
     console.log('layout use effect location')
@@ -108,11 +103,12 @@ export default function App() {
   return (<Box style={style.display}>
     <Loading />
     {loginState ? 
-      <FolderContext.Provider value={{folds: data, location: location, setLocation, setData, window: width }}>
+      <FolderContext.Provider value={{folds: data, location: location, setLocation, setData, window: width, progressRef, setProgress }}>
         <WorkPage />
+        <BottomPanel setReady={setReady} setTextField={setTextField} ready={ready} location={location} setData={setData}/>
+        <ProgressFullIndicator {...progress} />
       </FolderContext.Provider> : 
       <Login />}
-      {loginState &&<BottomPanel setReady={setReady} setTextField={setTextField} ready={ready} location={location} setData={setData}/>}
       <TextInputField {...textField} />
   </Box>)
 }

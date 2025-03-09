@@ -12,14 +12,19 @@ import Api from "../mech/api";
 import download from "../mech/download";
 import cookies from "../mech/cookies";
 import { Url } from "../mech/httpserv";
-import TextInputField, {TextProps, ReadyProps} from "./TextInputField";
+import TextInputField, {TextProps, ReadyProps, emptyText} from "./TextInputField";
 import { ScaledSize } from "react-native";
 
 const loading = useLoading;
 
+const heightVal = (folds: Data, window:ScaledSize) => {
+    return Math.floor((folds.directs.length + folds.files.length)/Math.floor(window.width/100))*100+200
+}
+
 export default function FilesList({folds, location, setLocation, setData, window}: {folds: Data, location: string, setLocation: (str: string) => void, setData: (data: Data)=>void, window: ScaledSize}) {
     const [ pos, setPos ] = useState<number>(-3);
     const [ open, setOpen ] = useState(false);
+    const [ boxHeight, setBoxHeight] = useState<number>(heightVal(folds, window))
     const [ readyProps, setReadyProps ] = useState<ReadyProps>({
         ready: false,
         result: {
@@ -40,10 +45,7 @@ export default function FilesList({folds, location, setLocation, setData, window
     useEffect(()=>{
         console.log(readyProps);
         if (readyProps.ready) {
-            setTextFieldsState({
-                ...textFieldsState,
-                show: false
-            })
+            setTextFieldsState(emptyText(setReadyProps))
         }
     }, [readyProps])
 
@@ -51,6 +53,10 @@ export default function FilesList({folds, location, setLocation, setData, window
         console.log(window.width%100)
         console.log(`width: ${window.width - (window.width%100)}`)
     }, [window])
+
+    useEffect(()=>{
+        setBoxHeight(heightVal(folds, window))
+    }, [folds, window])
 
     const nameToType = (str: string) => {
         const extArr: string [] = str.split('.')
@@ -153,16 +159,18 @@ export default function FilesList({folds, location, setLocation, setData, window
                 try {
                     let res = await Api.askLS(User.getToken(),location, 'chmod', fName);
                     console.log(res.data?.tok)
-                    let expUri: string = encodeURI(`${Url}/download?tok=${res.data.tok}&name=${res.data.name}&type=${res.data.type}`)
-                    console.log(expUri)
+                    let expUri = encodeURI(`${Url}/download?tok=${res.data.tok}&name=${res.data.name}&type=${res.data.type}`)
+                    console.log(`expUri: ${expUri}`)
                     setTextFieldsState({
-                        ...textFieldsState,
                         show: true,
                         name: 'Ссылка на скачивание',
                         text: expUri,
-                        yButton: true,
-                        nButton: false,
-                        inputEnable: true
+                        yButton: false,
+                        nButtonText: 'Закрыть',
+                        nButton: true,
+                        inputEnable: true,
+                        copyButton: true,
+                        eventFunc: setReadyProps
                     })
                 } 
                 catch {(e: any)=>{console.log(e)}}
@@ -177,11 +185,18 @@ export default function FilesList({folds, location, setLocation, setData, window
         setOpen(true)
     }
     return (
-        <Box style={{width: '100%', minHeight: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+        <Box style={{width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
             {open&&folds?.directs&&<ElementMenue open={open} setOpen={setOpen} file={pos >= folds?.directs.length} setAction={longPressMenueAction} />}
             <TextInputField {...textFieldsState} />
             <ScrollView>
-                <Box style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-start', maxWidth: window.width - (window.width%100)}}>
+                <Box style={{
+                    display: 'flex', 
+                    flexDirection: 'row', 
+                    flexWrap: 'wrap', 
+                    justifyContent: 'flex-start', 
+                    maxWidth: window.width - (window.width%100),
+                    height: boxHeight
+                    }}>
                     <FolderShortcat 
                         name={'Обновить'} 
                         type="update"
