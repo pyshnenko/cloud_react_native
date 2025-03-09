@@ -85,9 +85,9 @@ export default function BottomPanel ({setTextField, setReady, ready, location, s
                     "Content-Type": "multipart/form-data",
                     Accept: "application/json",
                     Authorization: `${User.getToken()}`,
-                    folder: `${User.getLogin()}/${dataCont.location}`,
-                    user: User.getLogin(),
-                    fname: files[i].name
+                    folder: encodeURI(`${User.getLogin()}/${dataCont.location}`),
+                    user: encodeURI(User.getLogin() || ''),
+                    fname: encodeURI(files[i].name || '')
                 }, 
                 onUploadProgress: (progr: AxiosProgressEvent)=>{
                     const val = (Math.round(progr.loaded * 100 / (progr.total||1)))
