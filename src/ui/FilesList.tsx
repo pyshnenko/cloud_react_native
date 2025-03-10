@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { Data } from "../hook/useFolderLocation";
-import { Button } from "@react-native-material/core";
-import { Box, Text } from "@react-native-material/core";
+import { Button, Box, Text, TextInput } from "@react-native-material/core";
 import FolderShortcat from "./FolderShortcat";
 import { TouchableOpacity, Dimensions, ScrollView } from "react-native";
 import { useLoading } from "../displayMech/loading";
@@ -14,17 +13,15 @@ import cookies from "../mech/cookies";
 import { Url } from "../mech/httpserv";
 import TextInputField, {TextProps, ReadyProps, emptyText} from "./TextInputField";
 import { ScaledSize } from "react-native";
+import fileMech from "../mech/fileMech";
+import searchStyle from "../styles/searchStyle";
+import SearchPanel from "./searchPanel";
 
 const loading = useLoading;
-
-const heightVal = (folds: Data, window:ScaledSize) => {
-    return Math.floor((folds.directs.length + folds.files.length)/Math.floor(window.width/100))*100+200
-}
 
 export default function FilesList({folds, location, setLocation, setData, window}: {folds: Data, location: string, setLocation: (str: string) => void, setData: (data: Data)=>void, window: ScaledSize}) {
     const [ pos, setPos ] = useState<number>(-3);
     const [ open, setOpen ] = useState(false);
-    const [ boxHeight, setBoxHeight] = useState<number>(heightVal(folds, window))
     const [ readyProps, setReadyProps ] = useState<ReadyProps>({
         ready: false,
         result: {
@@ -53,29 +50,6 @@ export default function FilesList({folds, location, setLocation, setData, window
         console.log(window.width%100)
         console.log(`width: ${window.width - (window.width%100)}`)
     }, [window])
-
-    useEffect(()=>{
-        setBoxHeight(heightVal(folds, window))
-    }, [folds, window])
-
-    const nameToType = (str: string) => {
-        const extArr: string [] = str.split('.')
-        const ext: string = extArr[extArr.length-1];
-        //console.log(ext)
-        switch (ext) { 
-            case 'txt': return 'text-snippet'
-            case 'rar': return 'archive'
-            case 'zip': return 'archive'
-            case 'pdf': return 'picture-as-pdf'
-            case 'doc': return 'edit-document'
-            case 'docx': return 'edit-document'
-            case 'png': return 'image'
-            case 'jpg': return 'image'
-            case 'jpeg': return 'image'
-            case 'ico': return 'image'
-            default: return "insert-drive-file"
-        }
-    }
 
     let lastTap = useRef(0);
     const doubleClick = (index: number) => {
@@ -188,14 +162,18 @@ export default function FilesList({folds, location, setLocation, setData, window
         <Box style={{width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
             {open&&folds?.directs&&<ElementMenue open={open} setOpen={setOpen} file={pos >= folds?.directs.length} setAction={longPressMenueAction} />}
             <TextInputField {...textFieldsState} />
-            <ScrollView>
+            <SearchPanel />
+            <ScrollView style={{
+                width: window.width,
+                height: window.height-60
+            }}>
                 <Box style={{
                     display: 'flex', 
                     flexDirection: 'row', 
                     flexWrap: 'wrap', 
                     justifyContent: 'flex-start', 
                     maxWidth: window.width - (window.width%100),
-                    height: boxHeight
+                    //height: boxHeight
                     }}>
                     <FolderShortcat 
                         name={'Обновить'} 
@@ -235,9 +213,10 @@ export default function FilesList({folds, location, setLocation, setData, window
                             longPress={longPress}
                             index={index + folds.directs.length}
                             name={item} 
-                            type={nameToType(item)}
+                            type={fileMech.nameToType(item).text}
                             active={index === (pos - folds.directs.length)}
                             location={location}
+                            community={fileMech.nameToType(item)?.community || false}
                         />
                     )})}
                 </Box>

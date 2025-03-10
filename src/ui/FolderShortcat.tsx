@@ -1,12 +1,14 @@
 import { Box, Text, IconButton, Button } from "@react-native-material/core";
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import IconC from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TouchableOpacity, Dimensions, Image } from "react-native";
 import { User } from "../hook/useUserAuth";
 import { dataUrl } from "../mech/httpserv";
+import colors from "../styles/colors";
 
-interface Props {name: string, type: string, active: boolean, index: number, doubleClick: (n: number)=> void, longPress: (n: number)=> void, location: string}
+interface Props {name: string, type: string, active: boolean, index: number, doubleClick: (n: number)=> void, longPress: (n: number)=> void, location: string, community?: boolean}
 
-export default function FolderShortcat({name, type, active, index, doubleClick, longPress, location}: Props) {
+export default function FolderShortcat({name, type, active, index, doubleClick, longPress, location, community}: Props) {
 
     const nameShortText: string = shortName(name, active);
 
@@ -23,11 +25,11 @@ export default function FolderShortcat({name, type, active, index, doubleClick, 
                     flexWrap: 'nowrap',
                     alignItems: 'center',
                     backgroundColor: active ? 
-                        ('antiquewhite') :
+                        (colors.active) :
                         ''
                 }}
             >
-                {FileView(type, name, location)}
+                {FileView(type, name, location, community)}
                 <Text style={{textAlign: 'center', fontSize: 14}} android_hyphenationFrequency="normal">{nameShortText}</Text>
             </Box>
         </TouchableOpacity>)
@@ -39,7 +41,7 @@ function shortName(name: string, active: boolean) {
     else return (name.slice(0, 20) + '...')
 }
 
-function FileView(type: string, name: string, location: string) {
+function FileView(type: string, name: string, location: string, community: boolean = false) {
     //console.log(location)
     switch (type) {
         case 'image': return (<Box style={{width: 48, height: 48}}>
@@ -47,7 +49,7 @@ function FileView(type: string, name: string, location: string) {
                 style={{zIndex: 3, width: 48, height: 48, backgroundColor: 'aliceblue', borderRadius: 10}} 
                 source={{uri: `${dataUrl}${location||'/'}${name}?t=${User.getToken()}`}} />
             <Icon name='image' style={{
-                color: 'rgb(10, 213, 141);', 
+                color: colors.files, 
                 fontSize: 48,
                 position: 'relative',
                 top: -48,
@@ -55,9 +57,12 @@ function FileView(type: string, name: string, location: string) {
                 zIndex: 2
             }} />
         </Box>)//`https://cloud.spamigor.ru/data${location||'/'}${name}?t=${User.getToken()}`
-        default: return (<Icon name={type as any} style={{
-            color: type === 'folder' ? 'rgb(255, 156, 12)' : 'rgb(10, 213, 141);', 
+        default: return (<>{community ? <IconC name={type as any} style={{
+            color: type === 'folder' ? colors.folders : colors.files, 
             fontSize: 48
-        }} />)
+        }} /> : <Icon name={type as any} style={{
+            color: type === 'folder' ? colors.folders : colors.files, 
+            fontSize: 48
+        }} />}</>)
     }
 }

@@ -8,6 +8,7 @@ import FilesList from '../src/ui/FilesList';
 import { getContent } from '../src/hook/useFolderLocation';
 import { Loading, useLoading } from '../src/displayMech/loading';
 import { ScaledSize } from 'react-native';
+import colors from '../src/styles/colors';
 //import cookie from '@/components/mech/cookie';
 
 export default function WorkPage() {
@@ -30,7 +31,7 @@ export default function WorkPage() {
 
   return (
     <Box style={{
-      backgroundColor: 'aliceblue', 
+      backgroundColor: colors.background, 
       height: '100%', 
       width: '100%',
       display: 'flex', 

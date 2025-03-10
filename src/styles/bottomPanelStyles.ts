@@ -1,14 +1,15 @@
 import { StyleSheet } from "react-native"
+import colors from "./colors"
 export default StyleSheet.create({
     all: {
         position: 'absolute',
         bottom: 0,
         left: 0,
-        backgroundColor: 'darkgrey',
+        backgroundColor: colors.bottom,
         height: 60,
         width: '100%',
         zIndex: 200,
-        boxShadow: '0 0 10px darkgrey'
+        boxShadow: '0 0 10px colors.bottom'
     }, 
     outBox: {
         display: 'flex',
@@ -21,12 +22,13 @@ export default StyleSheet.create({
     icon: {
         borderRadius: 40,
         fontSize: 60,
-        color: 'white',
-        borderColor:'blue',
-        backgroundColor: 'blue'
+        color: colors.bottomBoxIcon,
+        borderColor:colors.centralBottomIcon,
+        backgroundColor: colors.centralBottomIcon
     },
     buttonIcon: {
-        fontSize: 40
+        fontSize: 40,
+        color: colors.bottomCentralIcon
     },
     boxIcon: {
         display: 'flex',
@@ -35,16 +37,18 @@ export default StyleSheet.create({
         alignContent: 'center',
         width: '100%',
         height: '100%',
-        flexDirection:'column'
+        flexDirection:'column',
+        position: 'relative',
+        top: -10
     }, 
     centralIconBox: {
         position: 'relative',
         top: -35,
-        backgroundColor: 'blue',
+        backgroundColor: colors.centralBottomIcon,
         padding: 10,
         borderRadius: 40,
         height: 80,
-        boxShadow: '0 0 10px blue',
+        boxShadow: `0 0 10px ${colors.centralBottomIcon}`,
 
     }
 })
