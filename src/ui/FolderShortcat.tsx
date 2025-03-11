@@ -25,7 +25,7 @@ export default function FolderShortcat({name, type, active, index, doubleClick, 
                     flexWrap: 'nowrap',
                     alignItems: 'center',
                     backgroundColor: active ? 
-                        (colors.active) :
+                        (colors.white.active) :
                         ''
                 }}
             >
@@ -49,7 +49,7 @@ function FileView(type: string, name: string, location: string, community: boole
                 style={{zIndex: 3, width: 48, height: 48, backgroundColor: 'aliceblue', borderRadius: 10}} 
                 source={{uri: `${dataUrl}${location||'/'}${name}?t=${User.getToken()}`}} />
             <Icon name='image' style={{
-                color: colors.files, 
+                color: colors.white.files, 
                 fontSize: 48,
                 position: 'relative',
                 top: -48,
@@ -58,10 +58,10 @@ function FileView(type: string, name: string, location: string, community: boole
             }} />
         </Box>)//`https://cloud.spamigor.ru/data${location||'/'}${name}?t=${User.getToken()}`
         default: return (<>{community ? <IconC name={type as any} style={{
-            color: type === 'folder' ? colors.folders : colors.files, 
+            color: type === 'folder' ? colors.white.folders : colors.white.files, 
             fontSize: 48
         }} /> : <Icon name={type as any} style={{
-            color: type === 'folder' ? colors.folders : colors.files, 
+            color: type === 'folder' ? colors.white.folders : colors.white.files, 
             fontSize: 48
         }} />}</>)
     }

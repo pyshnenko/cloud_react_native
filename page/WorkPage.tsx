@@ -31,7 +31,7 @@ export default function WorkPage() {
 
   return (
     <Box style={{
-      backgroundColor: colors.background, 
+      backgroundColor: colors.white.background, 
       height: '100%', 
       width: '100%',
       display: 'flex', 
@@ -42,7 +42,7 @@ export default function WorkPage() {
       top: 0, 
       left: 0
     }}>
-      <Text>{dataCont.location}</Text>
+      <Text style={{margin: 4}}>{dataCont.location}</Text>
       <FilesList folds={dataCont.folds} location={dataCont.location} setLocation={dataCont.setLocation} setData={dataCont.setData} window={dataCont.window} />
     </Box>
   );

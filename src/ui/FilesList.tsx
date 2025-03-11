@@ -165,7 +165,7 @@ export default function FilesList({folds, location, setLocation, setData, window
             <SearchPanel />
             <ScrollView style={{
                 width: window.width,
-                height: window.height-60
+                height: window.height-60-60
             }}>
                 <Box style={{
                     display: 'flex', 

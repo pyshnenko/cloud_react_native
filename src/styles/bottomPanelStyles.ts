@@ -5,11 +5,11 @@ export default StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         left: 0,
-        backgroundColor: colors.bottom,
+        backgroundColor: colors.white.bottom,
         height: 60,
         width: '100%',
         zIndex: 200,
-        boxShadow: '0 0 10px colors.bottom'
+        boxShadow: `0 0 10px ${colors.white.bottom}`
     }, 
     outBox: {
         display: 'flex',
@@ -22,13 +22,13 @@ export default StyleSheet.create({
     icon: {
         borderRadius: 40,
         fontSize: 60,
-        color: colors.bottomBoxIcon,
-        borderColor:colors.centralBottomIcon,
-        backgroundColor: colors.centralBottomIcon
+        color: colors.white.bottomBoxIcon,
+        borderColor:colors.white.centralBottomIcon,
+        backgroundColor: colors.white.centralBottomIcon
     },
     buttonIcon: {
         fontSize: 40,
-        color: colors.bottomCentralIcon
+        color: colors.white.bottomCentralIcon
     },
     boxIcon: {
         display: 'flex',
@@ -44,11 +44,11 @@ export default StyleSheet.create({
     centralIconBox: {
         position: 'relative',
         top: -35,
-        backgroundColor: colors.centralBottomIcon,
+        backgroundColor: colors.white.centralBottomIcon,
         padding: 10,
         borderRadius: 40,
         height: 80,
-        boxShadow: `0 0 10px ${colors.centralBottomIcon}`,
+        boxShadow: `0 0 10px ${colors.white.centralBottomIcon}`,
 
     }
 })

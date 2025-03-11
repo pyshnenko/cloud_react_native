@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Box, Button } from "@react-native-material/core";
 import { GestureResponderEvent, StyleSheet } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import colors from "../styles/colors";
+import { Color } from "@react-native-material/core";
 
 let startTouchPosition = -1;
 let baseTopPosition = 60;
@@ -38,14 +40,15 @@ export default function ElementMenue ({open, setOpen, file, setAction}: ElementM
                 position: 'absolute', 
                 top: `${topPosition}%`, 
                 left: 0, 
-                backgroundColor: 'lightgray', 
+                backgroundColor: colors.white.longPressPanel.background, 
                 width: '100%', 
                 minHeight: '200%', 
                 borderRadius: 30,
                 borderStyle: 'solid',
-                borderColor: 'black',
+                borderColor: colors.white.longPressPanel.border,
                 borderWidth: 3,
                 borderTopWidth: 15,
+                boxShadow: `0 0 10px ${colors.white.longPressPanel.border}`,
                 zIndex: 100,
                 paddingTop: 20
             }}
@@ -66,10 +69,10 @@ export default function ElementMenue ({open, setOpen, file, setAction}: ElementM
                 }
             }}
         >
-                {!file&&<Button leading={(props)=><Icon name='folder-open' {...props} />} contentContainerStyle={buttonStyle.buttonIn} variant="outlined" color="#0000FF" title='Открыть' onPress={()=>setAction('Открыть')} />}
-                <Button leading={(props)=><Icon name='download' {...props} />} contentContainerStyle={buttonStyle.buttonIn} variant="outlined" color="#0000FF" title='Скачать' onPress={()=>setAction('Скачать')} />
-                <Button leading={(props)=><Icon name='delete' {...props} />} contentContainerStyle={buttonStyle.buttonIn} variant="outlined" color="#0000FF" title='Удалить' onPress={()=>setAction('Удалить')} />
-                <Button leading={(props)=><Icon name='share' {...props} />} contentContainerStyle={buttonStyle.buttonIn} variant="outlined" color="#0000FF" title='Поделиться' onPress={()=>setAction('Поделиться')} />
+                {!file&&<Button leading={(props)=><Icon name='folder-open' {...props} />} color="#4E7CA6" contentContainerStyle={buttonStyle.buttonIn} variant="outlined" title='Открыть' onPress={()=>setAction('Открыть')} />}
+                <Button leading={(props)=><Icon name='download' {...props} />} color="#4E7CA6" contentContainerStyle={buttonStyle.buttonIn} variant="outlined" title='Скачать' onPress={()=>setAction('Скачать')} />
+                <Button leading={(props)=><Icon name='delete' {...props} />} color="#4E7CA6" contentContainerStyle={buttonStyle.buttonIn} variant="outlined" title='Удалить' onPress={()=>setAction('Удалить')} />
+                <Button leading={(props)=><Icon name='share' {...props} />} color="#4E7CA6" contentContainerStyle={buttonStyle.buttonIn} variant="outlined" title='Поделиться' onPress={()=>setAction('Поделиться')} />
             </Box>
     )
 }
@@ -77,7 +80,7 @@ export default function ElementMenue ({open, setOpen, file, setAction}: ElementM
 const buttonStyle = StyleSheet.create({button: {
     height: 50,
     color: 'black',
-    backgroundColor: 'lightgray',
+    backgroundColor: colors.white.longPressPanel.background,
     borderRadius: 0, 
     alignItems: 'flex-start', 
     justifyContent: 'center'
@@ -86,5 +89,12 @@ const buttonStyle = StyleSheet.create({button: {
         width: '100%',
         height: 50,
         textAlign: 'left',
-        justifyContent: 'flex-start',
-}})
+        justifyContent: 'flex-start'
+    },
+    title: {
+        color: colors.white.longPressPanel.text
+    },
+    icon: {
+        color: colors.white.longPressPanel.text
+    }
+})

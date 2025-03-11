@@ -7,7 +7,9 @@ export default function SearchPanel() {
     return (<>    
         <Box style={searchStyle.window}>
             <TextInput inputContainerStyle={searchStyle.searchInput} variant="standard" style={searchStyle.search} />
-            <IconButton icon={<Icon style={searchStyle.icon} name='search' />} />
+            <IconButton style={searchStyle.iconButton} icon={<Icon style={searchStyle.icon} name='search' />} />
+            
         </Box>
     </>)
 }
+//<Box style={searchStyle.box}/>
