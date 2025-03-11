@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Text, TextInput, Button } from "@react-native-material/core";
-import Api from '../src/mech/api';
+import Api from '../src/mech/http/api';
 import { User } from '../src/hook/useUserAuth';
-import cookies from '../src/mech/cookies';
+import cookies from '../src/mech/http/cookies';
 
 export default function Login () {
 

@@ -1,5 +1,5 @@
 import RNFetchBlob from 'rn-fetch-blob';
-import { Url } from './httpserv';
+import { Url } from './http/httpserv';
 import { PermissionsAndroid } from 'react-native';
 
 function download(locationFull: string, name: string, token: string, postfix: string) {

@@ -6,13 +6,13 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 import { User } from "../hook/useUserAuth";
 import { useEffect, useState } from "react";
 import {TextProps, ReadyProps, emptyText} from "../ui/TextInputField";
-import Api from "../mech/api";
+import Api from "../mech/http/api";
 import { useLoading } from "../displayMech/loading";
 import { getContent, Data, FolderContext } from "../hook/useFolderLocation";
 import { pick, types, DocumentPickerResponse } from '@react-native-documents/picker'
 import { useCallback, useContext } from "react";
 import { uploadFiles, UploadFileItem } from "react-native-fs";
-import { Url } from "../mech/httpserv";
+import { Url } from "../mech/http/httpserv";
 import bottomPanelStyles from "../styles/bottomPanelStyles";
 import axios, {AxiosProgressEvent} from "axios";
 import { ScaledSize } from "react-native";

@@ -3,7 +3,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import IconC from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TouchableOpacity, Dimensions, Image } from "react-native";
 import { User } from "../hook/useUserAuth";
-import { dataUrl } from "../mech/httpserv";
+import { dataUrl } from "../mech/http/httpserv";
 import colors from "../styles/colors";
 
 interface Props {name: string, type: string, active: boolean, index: number, doubleClick: (n: number)=> void, longPress: (n: number)=> void, location: string, community?: boolean}

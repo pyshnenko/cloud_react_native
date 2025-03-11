@@ -4,9 +4,9 @@ import { getContent } from "../hook/useFolderLocation";
 import { Data } from "../hook/useFolderLocation";
 import { jwtDecode } from "jwt-decode";
 import { User } from "../hook/useUserAuth";
-import Api from "./api";
+import Api from "./http/api";
 import { useLoading } from "../displayMech/loading";
-import cookies from "./cookies";
+import cookies from "./http/cookies";
 
 export async function startAuth(setLocation: (s: string)=>void) {
     const loading = useLoading;

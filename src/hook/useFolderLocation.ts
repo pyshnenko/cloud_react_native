@@ -1,4 +1,4 @@
-import Api from "../mech/api";
+import Api from "../mech/http/api";
 import { User } from "./useUserAuth";
 
 export interface Data {

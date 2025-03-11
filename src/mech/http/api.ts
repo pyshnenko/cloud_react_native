@@ -1,5 +1,5 @@
 import { loginApi, privateApi } from "./httpserv";
-import { loginType, RegisterReqData } from "../types/api";
+import { loginType, RegisterReqData } from "../../types/api";
 
 const test = () => {
     return loginApi().post('/test')

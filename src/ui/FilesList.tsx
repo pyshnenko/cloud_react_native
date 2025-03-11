@@ -7,21 +7,23 @@ import { useLoading } from "../displayMech/loading";
 import { getContent } from "../hook/useFolderLocation";
 import ElementMenue from "./ElementMenue";
 import { User } from "../hook/useUserAuth";
-import Api from "../mech/api";
+import Api from "../mech/http/api";
 import download from "../mech/download";
-import cookies from "../mech/cookies";
-import { Url } from "../mech/httpserv";
+import cookies from "../mech/http/cookies";
+import { Url } from "../mech/http/httpserv";
 import TextInputField, {TextProps, ReadyProps, emptyText} from "./TextInputField";
 import { ScaledSize } from "react-native";
-import fileMech from "../mech/fileMech";
-import searchStyle from "../styles/searchStyle";
 import SearchPanel from "./searchPanel";
+import LabelCentralBox from "./LabelCentralBox";
+import SearchList from "./searchList";
 
 const loading = useLoading;
 
 export default function FilesList({folds, location, setLocation, setData, window}: {folds: Data, location: string, setLocation: (str: string) => void, setData: (data: Data)=>void, window: ScaledSize}) {
     const [ pos, setPos ] = useState<number>(-3);
     const [ open, setOpen ] = useState(false);
+    const [searchFolds, setSearchFolds] = useState<Data>({files: [], directs: []});
+    const [ searchMode, setSearchMode ] = useState<boolean>(false)
     const [ readyProps, setReadyProps ] = useState<ReadyProps>({
         ready: false,
         result: {
@@ -162,64 +164,14 @@ export default function FilesList({folds, location, setLocation, setData, window
         <Box style={{width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
             {open&&folds?.directs&&<ElementMenue open={open} setOpen={setOpen} file={pos >= folds?.directs.length} setAction={longPressMenueAction} />}
             <TextInputField {...textFieldsState} />
-            <SearchPanel />
+            <SearchPanel {...{searchMode, setSearchMode, location, setSearchFolds}} />
             <ScrollView style={{
-                width: window.width,
-                height: window.height-60-60
+                width: window.width - (window.width%100),
+                height: window.height-60-60-10
             }}>
-                <Box style={{
-                    display: 'flex', 
-                    flexDirection: 'row', 
-                    flexWrap: 'wrap', 
-                    justifyContent: 'flex-start', 
-                    maxWidth: window.width - (window.width%100),
-                    //height: boxHeight
-                    }}>
-                    <FolderShortcat 
-                        name={'Обновить'} 
-                        type="update"
-                        active={false}
-                        index={-2}
-                        doubleClick={doubleClick}
-                        longPress={longPress}
-                        location={''}
-                    />
-                    {location !== '/' && 
-                        <FolderShortcat 
-                            name={'Назад'} 
-                            type="arrow-back"
-                            active={false}
-                            index={-1}
-                            doubleClick={doubleClick}
-                            longPress={longPress}
-                            location={''}
-                    />}
-                    {Array.isArray(folds.directs) && folds?.directs.map((item: string, index: number) => { return (
-                        <FolderShortcat 
-                            name={item} 
-                            key={`folds-${index}`}
-                            type="folder"
-                            active={index === pos}
-                            doubleClick={doubleClick}
-                            longPress={longPress}
-                            index={index}
-                            location={location}
-                        />
-                    )})}
-                    {Array.isArray(folds.files) && folds.files.map((item: string, index: number) => { return (
-                        <FolderShortcat 
-                            key={`files-${index}`}
-                            doubleClick={doubleClick}
-                            longPress={longPress}
-                            index={index + folds.directs.length}
-                            name={item} 
-                            type={fileMech.nameToType(item).text}
-                            active={index === (pos - folds.directs.length)}
-                            location={location}
-                            community={fileMech.nameToType(item)?.community || false}
-                        />
-                    )})}
-                </Box>
+                {searchMode ? 
+                <SearchList {...searchFolds} /> :
+                <LabelCentralBox {...{location, folds, doubleClick, longPress, pos}} />}
             </ScrollView>
         </Box>
     )
