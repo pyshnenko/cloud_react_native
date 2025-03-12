@@ -21,7 +21,7 @@ export default function WorkPage() {
     location: string, 
     setLocation: (str: string) => void,
     setData: (data: Data) => void,
-    window: ScaledSize
+    window: ScaledSize,
   } = useContext(FolderContext);
 
   useEffect(()=>{

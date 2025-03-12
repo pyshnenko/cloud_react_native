@@ -16,6 +16,7 @@ import { ScaledSize } from "react-native";
 import SearchPanel from "./searchPanel";
 import LabelCentralBox from "./LabelCentralBox";
 import SearchList from "./searchList";
+import click from "../mech/click";
 
 const loading = useLoading;
 
@@ -53,17 +54,15 @@ export default function FilesList({folds, location, setLocation, setData, window
         console.log(`width: ${window.width - (window.width%100)}`)
     }, [window])
 
-    let lastTap = useRef(0);
     const doubleClick = (index: number) => {
-        const now = Date.now();
-        const DOUBLE_PRESS_DELAY = 1000;
-        if ((now - lastTap.current) < DOUBLE_PRESS_DELAY) {
-            setPos(-2)
-            newLocation(index)
-            
-        } else {
-            setPos(index)
-            lastTap.current = now;
+        const res = click();
+        setPos(index)
+        if (index < folds.directs.length) {
+            if (res.isDouble) {
+                setSearchMode(false)
+                setPos(-2)
+                newLocation(index)
+            } 
         }
     }
 
@@ -92,6 +91,7 @@ export default function FilesList({folds, location, setLocation, setData, window
 
     const longPressMenueAction = async (action: string) => {
         setOpen(false)
+        setSearchMode(false)
         setPos(-3)
         console.log(pos)
         switch (action) {
@@ -164,15 +164,21 @@ export default function FilesList({folds, location, setLocation, setData, window
         <Box style={{width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
             {open&&folds?.directs&&<ElementMenue open={open} setOpen={setOpen} file={pos >= folds?.directs.length} setAction={longPressMenueAction} />}
             <TextInputField {...textFieldsState} />
-            <SearchPanel {...{searchMode, setSearchMode, location, setSearchFolds}} />
-            <ScrollView style={{
-                width: window.width - (window.width%100),
-                height: window.height-60-60-10
-            }}>
-                {searchMode ? 
-                <SearchList {...searchFolds} /> :
-                <LabelCentralBox {...{location, folds, doubleClick, longPress, pos}} />}
-            </ScrollView>
+            <SearchPanel {...{searchMode, setSearchMode, location, setSearchFolds: setData}} />
+            {searchMode ? 
+                <ScrollView style={{
+                    width: '100%',
+                    height: window.height-60-60-10
+                }}>          
+                    <SearchList {...{folds, location, doubleClick, longPress, pos}} />
+                </ScrollView> :
+                <ScrollView style={{
+                    width: window.width - (window.width%100),
+                    height: window.height-60-60-10
+                }}>                
+                    <LabelCentralBox {...{location, folds, doubleClick, longPress, pos}} />
+                </ScrollView>
+            }
         </Box>
     )
 }

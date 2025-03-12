@@ -63,10 +63,8 @@ export default function LabelCentralBox(props: InputProps) {
                     longPress={longPress}
                     index={index + folds.directs.length}
                     name={item} 
-                    type={fileMech.nameToType(item).text}
                     active={index === (pos - folds.directs.length)}
                     location={location}
-                    community={fileMech.nameToType(item)?.community || false}
                 />
             )})}
         </Box>
