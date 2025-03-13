@@ -24,9 +24,6 @@ export default function ElementMenue ({open, setOpen, file, setAction}: ElementM
     useEffect(()=>{ready.current=false}, [])
 
     useEffect(()=>{
-        console.log(`ready: ${ready.current}`)
-        console.log(`start: ${start.current}`)
-        console.log(`topPosition: ${topPosition}`)
         if (topPosition < 0) setTopPosition(0)
         if (start.current && !ready.current && (topPosition > 60) && (topPosition < 100) ) setTimeout((pos: number) => {setTopPosition(pos - 2)}, 3, topPosition)
         else if (start.current && !ready.current && topPosition <= 60) {

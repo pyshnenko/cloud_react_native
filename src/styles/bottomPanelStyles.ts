@@ -3,10 +3,9 @@ import colors from "./colors"
 export default StyleSheet.create({
     all: {
         position: 'absolute',
-        bottom: 0,
         left: 0,
         backgroundColor: colors.white.bottom,
-        height: 60,
+        height: 50,
         width: '100%',
         zIndex: 200,
         boxShadow: `0 0 10px ${colors.white.bottom}`
@@ -39,7 +38,7 @@ export default StyleSheet.create({
         height: '100%',
         flexDirection:'column',
         position: 'relative',
-        top: -10
+        top: -15
     }, 
     centralIconBox: {
         position: 'relative',

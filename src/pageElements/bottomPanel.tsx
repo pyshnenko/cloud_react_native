@@ -19,6 +19,8 @@ import { ScaledSize } from "react-native";
 
 interface progressInt {current: {[key: string]:number}}
 
+export const bottomWidth = 50;
+
 export default function BottomPanel ({setTextField, setReady, ready, location, setData}: {setData: (d: Data) => void , location: string, setTextField: (n: TextProps)=>void, setReady: (n: ReadyProps)=>void, ready: ReadyProps}) {
 
     const baseEmptyText = emptyText(setReady);
@@ -110,7 +112,7 @@ export default function BottomPanel ({setTextField, setReady, ready, location, s
         }
     }
 
-    return (<Box style={bottomPanelStyles.all}>
+    return (<Box style={{...bottomPanelStyles.all, top: dataCont.window.height-bottomWidth}}>
         <Box style={bottomPanelStyles.outBox}>
             <TouchableOpacity onPress={newFolderName}>
                 <Box style={{...bottomPanelStyles.boxIcon}}>

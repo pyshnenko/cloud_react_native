@@ -4,24 +4,27 @@ import { PermissionsAndroid } from 'react-native';
 
 function download(locationFull: string, name: string, token: string, postfix: string) {
     const { dirs } = RNFetchBlob.fs;
-    console.log(name)
-    console.log(dirs.DownloadDir + '/' + name)
+    let rName = name;
+    if (name.includes('/')) {
+      const nameArr: string[] = name.split('/');
+      console.log(nameArr)
+      rName = nameArr[nameArr.length-1]
+    }
     const configfb = {
         fileCache: true,
         addAndroidDownloads: {
           useDownloadManager: true,
           notification: true,
           mediaScannable: true,
-          title: name,
-          path: `${dirs.DownloadDir}/${name}`,
+          title: rName,
+          path: `${dirs.DownloadDir}/${rName}`,
         },
         useDownloadManager: true,
         notification: true,
         mediaScannable: true,
-        title: name,
-        path: `${dirs.DownloadDir}/${name}`,
+        title: rName,
+        path: `${dirs.DownloadDir}/${rName}`,
     };
-    console.log(`${Url}${postfix}${locationFull}?t=${token}`)
     RNFetchBlob.config(configfb || {})
      .fetch('GET', `${Url}${postfix}${locationFull}?t=${token}`, {})
      .then(res => {

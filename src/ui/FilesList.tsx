@@ -17,6 +17,7 @@ import SearchPanel from "./searchPanel";
 import LabelCentralBox from "./LabelCentralBox";
 import SearchList from "./searchList";
 import click from "../mech/click";
+import { bottomWidth } from "../pageElements/bottomPanel";
 
 const loading = useLoading;
 
@@ -168,13 +169,13 @@ export default function FilesList({folds, location, setLocation, setData, window
             {searchMode ? 
                 <ScrollView style={{
                     width: '100%',
-                    height: window.height-60-60-10
+                    height: window.height-bottomWidth-60-10
                 }}>          
                     <SearchList {...{folds, location, doubleClick, longPress, pos}} />
                 </ScrollView> :
                 <ScrollView style={{
-                    width: window.width - (window.width%100),
-                    height: window.height-60-60-10
+                    width: window.width - (window.width%90),
+                    height: window.height-bottomWidth-60-10
                 }}>                
                     <LabelCentralBox {...{location, folds, doubleClick, longPress, pos}} />
                 </ScrollView>

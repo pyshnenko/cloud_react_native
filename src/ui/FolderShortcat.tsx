@@ -22,9 +22,9 @@ export default function FolderShortcat({name, active, index, doubleClick, longPr
         <TouchableOpacity onPress={()=>doubleClick(index)} onLongPress={()=>longPress(index)}>
             <Box 
                 style={{ 
-                    width: 100, 
+                    width: 90, 
                     padding: 4,
-                    height: active ? 'auto' : 100, 
+                    height: active ? 'auto' : 90, 
                     display: 'flex',
                     flexDirection: 'column',
                     flexWrap: 'nowrap',
@@ -42,6 +42,6 @@ export default function FolderShortcat({name, active, index, doubleClick, longPr
 
 function shortName(name: string, active: boolean) {
     if (active) return name
-    else if (name.length < 22) return name
-    else return (name.slice(0, 20) + '...')
+    else if (name.length < 18) return name
+    else return (name.slice(0, 16) + '...')
 }
