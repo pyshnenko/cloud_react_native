@@ -6,10 +6,10 @@ Git web-версии: https://github.com/pyshnenko/cloud
 
 Запуск dev: npm start
 
-билд: https://github.com/pyshnenko/cloud_react_native/files/cloud_app.apk
+билд: https://github.com/pyshnenko/cloud_react_native/blob/main/files/cloud_app.apk
 (При установки андроид ругается)
 
-![](https://github.com/pyshnenko/cloud_react_native/files/screen.gif)
+![](files/screen.gif)
 
 Данные о пользователе хранит AsyncStorage
 
