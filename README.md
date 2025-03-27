@@ -7,7 +7,7 @@ Git web-версии: https://github.com/pyshnenko/cloud
 Запуск dev: npm start
 
 билд: https://github.com/pyshnenko/cloud_react_native/blob/main/files/cloud_app.apk
-(При установки андроид ругается)
+(При установке андроид ругается)
 
 ![](files/screen.gif)
 
