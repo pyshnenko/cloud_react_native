@@ -18,6 +18,7 @@ import LabelCentralBox from "./LabelCentralBox";
 import SearchList from "./searchList";
 import click from "../mech/click";
 import { bottomWidth } from "../pageElements/bottomPanel";
+import ImageViewer, {isImage} from "./imageViewer";
 
 const loading = useLoading;
 
@@ -26,6 +27,7 @@ export default function FilesList({folds, location, setLocation, setData, window
     const [ open, setOpen ] = useState(false);
     const [searchFolds, setSearchFolds] = useState<Data>({files: [], directs: []});
     const [ searchMode, setSearchMode ] = useState<boolean>(false)
+    const [imgWiew, setImgWiew] = useState<string | null>(null)
     const [ readyProps, setReadyProps ] = useState<ReadyProps>({
         ready: false,
         result: {
@@ -64,6 +66,10 @@ export default function FilesList({folds, location, setLocation, setData, window
                 setPos(-2)
                 newLocation(index)
             } 
+        }
+        else if (isImage(folds.files[pos - folds.directs.length])) {
+            console.log('open img')
+            setImgWiew(folds.files[pos - folds.directs.length])
         }
     }
 
@@ -166,6 +172,7 @@ export default function FilesList({folds, location, setLocation, setData, window
             {open&&folds?.directs&&<ElementMenue open={open} setOpen={setOpen} file={pos >= folds?.directs.length} setAction={longPressMenueAction} />}
             <TextInputField {...textFieldsState} />
             <SearchPanel {...{searchMode, setSearchMode, location, setSearchFolds: setData}} />
+            <ImageViewer {...{location, name: imgWiew, window, setImg: setImgWiew}} />
             {searchMode ? 
                 <ScrollView style={{
                     width: '100%',
