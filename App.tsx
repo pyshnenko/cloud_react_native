@@ -57,6 +57,10 @@ export default function App() {
 
   saveContext(FolderContext);
 
+  useEffect(()=>{
+    console.log(progress)
+  }, [progress])
+
   useEffect(() => {
     console.log('tablayout useeffect')
     startAuth(setLocation);

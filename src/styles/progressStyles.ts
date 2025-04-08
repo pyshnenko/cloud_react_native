@@ -11,7 +11,7 @@ const progrssStyles = StyleSheet.create({
         alignItems:'center',
         justifyContent: 'center',
         flexDirection:'column',
-        zIndex: 100
+        zIndex: 300
     },
     back: {
         position: 'absolute',
@@ -21,18 +21,18 @@ const progrssStyles = StyleSheet.create({
         height: '100%',
         backgroundColor: 'white',
         opacity: 0.85,
-        zIndex: 101
+        zIndex: 301
     },
     elem: {
-        zIndex: 102,
+        zIndex: 302,
         alignItems: 'stretch',
         width: '80%',
     },
     textOnProgress: {
         position: 'relative',
-        top: -50,
+        top: -40,
         left: 10,
-        fontSize: 30
+        fontSize: 20
     }
 })
 

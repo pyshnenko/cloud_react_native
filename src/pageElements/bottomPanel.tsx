@@ -39,6 +39,7 @@ export default function BottomPanel ({setTextField, setReady, ready, location, s
     
     const newFolderName = () => setTextField({
         ...baseEmptyText,
+        name: 'Имя папки',
         show: true,
         inputEnable: false
     })

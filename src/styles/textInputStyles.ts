@@ -26,6 +26,10 @@ const textInputStyle = StyleSheet.create({
         zIndex: 102,
         alignItems: 'stretch',
         width: '80%',
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 25,
+        boxShadow: '0 0 10px black' 
     },
     buttonsBox: {
         display: 'flex',

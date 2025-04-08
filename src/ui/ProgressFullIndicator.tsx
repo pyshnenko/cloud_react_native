@@ -9,13 +9,16 @@ export interface ProgressProps {
     [key: string]: number
 }
 
+interface progressInt {current: {[key: string]:number}}
+
 export default function ProgressFullIndicator (props: ProgressProps) {  
 
     let extBuf: string[] = [];
     
       let dataCont: {
         window: ScaledSize,
-        setProgress: (v:{[key: string]:number})=>void
+        setProgress: (v:{[key: string]:number})=>void,
+        progressRef: progressInt
       } = useContext(FolderContext);
 
     useEffect(()=>{
@@ -25,9 +28,13 @@ export default function ProgressFullIndicator (props: ProgressProps) {
         console.log(extBuf)
     }, [props])
 
-    return (<>{Object.keys(props).length!==0 && <Box style={{...progrssStyles.all, height: dataCont.window.height -60, width: dataCont.window.width}}>
+    return (<>{Object.keys(props).length!==0 && <Box style={{...progrssStyles.all, height: dataCont.window.height -0, width: dataCont.window.width}}>
         <TouchableOpacity style={progrssStyles.back} onPress={()=>{
-            if (extBuf.length === 0) dataCont.setProgress({})
+            console.log(extBuf)
+            if (extBuf.length === 0) {
+                dataCont.setProgress({});
+                dataCont.progressRef.current = {}
+            }
         }}/>
             <Box style={{...progrssStyles.elem}}>
                 <ScrollView>
