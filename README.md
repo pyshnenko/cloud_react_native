@@ -1,4 +1,4 @@
-#Андроид приложение облака на React-Native
+#Андроид приложение облака на React-Native (v0.1.5)
 
 Web-версия: https://cloud.spamigor.ru/
 Git web-версии: https://github.com/pyshnenko/cloud
